@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TicTacToe-一维数组demo</title>
+</head>
+<style>
+    .cell{
+        width: 100px;
+        height: 100px;
+        background-color: aquamarine;
+        display: inline-block;
+        border: solid 1px  white;
+        vertical-align: middle;
+
+        line-height: 100px;
+        font-size: 50px;
+        text-align: center;
+    }
+</style>
+<body>
+<div id="board"></div>
+</body>
+
+<script>
+    let pattern=[
+        0,0,0,
+        0,0,0,
+        0,0,0
+    ]
+    let color=1;
+    let endFlag =false;
+    function show() {
+        let board =document.getElementById("board");
+        board.innerHTML="";
+        for (let i=0;i<3;i++){
+            for (let j=0;j<3;j++){
+                let cell =document.createElement("div");
+                cell.classList.add("cell");
+                cell.innerText=
+                    pattern[i*3+j]==2?"X":
+                    pattern[i*3+j]==1?"O":"";
+                cell.addEventListener("click",()=>move(j,i));
+                board.appendChild(cell);
+            }
+            board.appendChild(document.createElement("br"));
+        }
+    }
+    function  move(x,y) {
+        if (endFlag) {
+            alert("游戏已结束");
+            return;
+        }
+        if (pattern[y*3+x]!=0){
+            alert("该点已被占用");
+            return;
+        }
+        pattern[y*3+x]=color;
+        if (check(pattern,color)){
+            endFlag =true;
+            alert(color==2?"X is winner":"O  is winner");
+
+        }
+        if (endFlag)  return;
+        console.log(bestchoice(pattern,color));
+        color=3-color;
+        show();
+        /*if (willwin(pattern,color)){
+            alert(color==2?"X will win":"O  will win");
+        }*/
+
+    }
+
+    function check(pattern,color) {
+        for (let i=0;i<3;i++){
+            let win =true;
+            for (let j=0;j<3;j++){
+                if (pattern[j*3+i]!==color){
+                    win =false;
+                }
+            }
+            if (win) return true;
+        }
+        for (let i=0;i<3;i++){
+            let win =true;
+            for (let j=0;j<3;j++){
+                if (pattern[i*3+j]!==color){
+                    win =false;
+                }
+            }
+            if (win) return true;
+        }
+        {
+            let win =true;
+            for (let j=0;j<3;j++){
+                if (pattern[j*3+j]!==color){
+                    win =false;
+                }
+            }
+            if (win) return true;
+        }
+        {
+            let win =true;
+            for (let j=0;j<3;j++){
+                if (pattern[j*3+2-j]!==color){
+                    win =false;
+                }
+            }
+            if (win) return true;
+        }
+        return false;
+    }
+    function clone(pattern) {
+        // return JSON.parse(JSON.stringify(pattern));
+        return Object.create(pattern);
+    }
+    function willwin(pattern,color) {
+        for(let i=0;i<3;i++){
+            for(let j=0;j<3;j++){
+                if (pattern[i*3+j]!==0)
+                    continue;
+                let tmp =clone(pattern);
+                tmp[i*3+j]=color;
+                if (check(tmp,color)){
+                    return [j,i];
+                }
+            }
+        }
+        return null;
+    }
+    function bestchoice(pattern,color) {
+        let point=willwin(pattern,color);
+        if (point){
+            return {
+                point:point,
+                result: 1
+            }
+        }
+        let result=-1;
+        outer:for (let i=0;i<3;i++){
+            for (let j=0;j<3;j++){
+                if (pattern[i*3+j]!==0){
+                    continue;
+                    let tmp=clone(pattern);
+                    tmp[i*3+j]=color;
+                    let opp=bestchoice(tmp,3-color);
+                    if (-opp.result>=result){
+                        point=[j,i];
+                        result=-opp.result;
+                    }
+                    if (result==1){
+                        break outer;
+                    }
+                }
+            }
+
+        }
+        return {
+            point: point,
+            result: point?result:0
+        }
+
+    }
+    show(pattern);
+</script>
+
+
+</html>
