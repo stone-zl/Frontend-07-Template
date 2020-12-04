@@ -59,6 +59,7 @@
         if (check(pattern,color)){
             endFlag =true;
             alert(color==2?"X is winner":"O  is winner");
+            show();
 
         }
         if (endFlag)  return;
@@ -141,16 +142,16 @@
             for (let j=0;j<3;j++){
                 if (pattern[i*3+j]!==0){
                     continue;
-                    let tmp=clone(pattern);
-                    tmp[i*3+j]=color;
-                    let opp=bestchoice(tmp,3-color);
-                    if (-opp.result>=result){
-                        point=[j,i];
-                        result=-opp.result;
-                    }
-                    if (result==1){
-                        break outer;
-                    }
+                }
+                let tmp=clone(pattern);
+                tmp[i*3+j]=color;
+                let opp=bestchoice(tmp,3-color);
+                if (-opp.result>=result){
+                    point=[j,i];
+                    result=-opp.result;
+                }
+                if (result==1){
+                    break outer;
                 }
             }
 
