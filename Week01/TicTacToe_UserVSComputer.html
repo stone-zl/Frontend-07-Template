@@ -152,7 +152,8 @@
             for (let j=0;j<3;j++){
                 if (pattern[i*3+j]!==0){
                     continue;
-                    let tmp=clone(pattern);
+                }
+				let tmp=clone(pattern);
                     tmp[i*3+j]=color;
                     let opp=bestchoice(tmp,3-color);
                     if (-opp.result>=result){
@@ -162,7 +163,6 @@
                     if (result==1){
                         break outer;
                     }
-                }
             }
 
         }
