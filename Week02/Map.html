@@ -10,7 +10,7 @@
         * 无line-height，浏览器标准模式下无法很好的工作
         */
         display:inline-block;
-        line-height: 7px;
+        line-height: 6px;
         width: 6px;
         height: 6px;
         background-color: gray;
@@ -20,6 +20,8 @@
     }
     #container{
         width: 701px;
+        display: flex;
+        flex-wrap: wrap;
     }
 </style>
 <body>
@@ -62,9 +64,30 @@
     })
     document.addEventListener("mouseup",()=>mousedown=false);
     document.addEventListener("contextmenu",e=>e.preventDefault());//禁用右键弹出菜单属性
-
+    /*
+    * 广度优先搜索
+    * */
     function path(map,start,end) {
+        var queue =[start];
+        function insert(x,y) {
+            if (x<0||x>=100||y<0||y>=100)return;/*遇到边界则返回*/
+            if(map[y*100+x]) return;
+            map[y*100+x]=2;
+            queue.push([x,y]);
+        }
+        while (queue.length){
+            let [x,y]=queue.shift();
+            console.log(x,y)
+            if (x===end[0] && y===end[1]){
+                return true;
+            }
+            insert(x-1,y);
+            insert(x+1,y);
+            insert(x,y-1);
+            insert(x,y+1);
 
+        }
+        return false;
     }
 </script>
 </html>
